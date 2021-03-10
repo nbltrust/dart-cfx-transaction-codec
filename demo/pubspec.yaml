@@ -1,0 +1,11 @@
+name: conflux_codec_demo
+version: 0.0.1
+publish_to: 'none'
+
+dependencies:
+  convert: ^2.1.1
+  conflux_codec:
+    path: ../
+
+environment:
+  sdk: '>=2.10.0 <3.0.0'
