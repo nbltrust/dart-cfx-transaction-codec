@@ -40,6 +40,28 @@ Uint8List toBase32Array(Uint8List d) {
   return Uint8List.fromList(ret);
 }
 
+String getAddressType(Uint8List address) {
+  if (address.length < 1) {
+    throw Exception('Empty payload in address');
+  }
+
+  switch (address[0] & 0xf0) {
+    case 0x10:
+      return 'user';
+    case 0x80:
+      return 'contract';
+    case 0x00:
+      for (var i = 0; i < address.length; i++) {
+        if (address[i] != 0x00) {
+          return 'builtin';
+        }
+      }
+      return 'null';
+    default:
+      throw Exception('Invalid conflux address type, check first byte');
+  }
+}
+
 class Address {
   Uint8List address; // plain address
   String net_prefix; // cfx | cfxtest | net[n] where n != 1, 1029
@@ -66,7 +88,8 @@ class Address {
       if (c0 & 0x10 > 0) c ^= 0x1e4f43e470;
     });
     c ^= 1;
-    return toBase32Array(Uint8List.fromList(hex.decode(c.toRadixString(16))));
+
+    return toBase32Array(Uint8List.fromList(my_hexdecode(c.toRadixString(16))));
   }
 
   Uint8List checkSum() {
@@ -77,27 +100,13 @@ class Address {
   }
 
   String toBase32({bool withAddressType = false}) {
-    var addressType;
-    switch (address[1] & 0xf0) {
-      case 0x00:
-        addressType = 'builtin';
-        break;
-      case 0x10:
-        addressType = 'user';
-        break;
-      case 0x80:
-        addressType = 'contract';
-        break;
-      default:
-        throw Exception("Invalid conflux address type, check first byte");
-    }
-    addressType = 'type.' + addressType;
+    var addressType = 'type.' + getAddressType(address.sublist(1));
     var b32Array = toBase32Array(address) + checkSum();
     var b32Addr = b32Array.map((i) => BASE32_CHARS[i]).join('');
-    if(withAddressType) {
+    if (withAddressType) {
       return net_prefix + ':' + addressType + ':' + b32Addr;
     } else {
-      return b32Addr;
+      return net_prefix + ':' + b32Addr;
     }
   }
 }
@@ -110,10 +119,12 @@ Uint8List my_hexdecode(String hexStr) {
 // 本方法只能计算前缀是cfx（主链）的地址
 // 不能计算测试链的地址（前缀是cfxtest）
 // 如果要计算测试链地址，需要Address.fromHex(..., networkPrefix: 'cfxtest')
-String publicKeyToAddress(String hexX, String hexY) {
+String publicKeyToAddress(String hexX, String hexY,
+    {String netPrefix = 'cfx', bool withAddressType = false}) {
   var plainKey = my_hexdecode(hexX) + my_hexdecode(hexY);
   var digest = SHA3Digest(256, true).process(Uint8List.fromList(plainKey));
   var address = digest.sublist(digest.length - 20).toList();
   address[0] = (address[0] & 0x0f) | 0x10;
-  return Address.fromHex(hex.encode(address)).toBase32(withAddressType: true);
+  return Address.fromHex(hex.encode(address), netPrefix: netPrefix)
+      .toBase32(withAddressType: withAddressType);
 }
