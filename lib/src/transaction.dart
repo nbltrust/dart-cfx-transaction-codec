@@ -9,8 +9,7 @@ import 'package:pointycastle/digests/sha3.dart';
 import './address.dart';
 
 int arrToInt(List<int> i) {
-  if(i.length == 0)
-    return null;
+  if (i.length == 0) return null;
   return int.parse(hex.encode(i), radix: 16);
 }
 
@@ -19,29 +18,29 @@ class ConfluxTransaction {
   int gasPrice;
   int gas;
   Address to;
-  int value;
+  BigInt value;
   int storageLimit;
   int epochHeight;
   int chainId;
   List<int> data;
   Uint8List rlp;
 
-  ConfluxTransaction(this.nonce, this.gasPrice, this.gas, 
-    this.to, this.value, this.storageLimit, this.epochHeight, this.chainId, this.data, this.rlp);
+  ConfluxTransaction(this.nonce, this.gasPrice, this.gas, this.to, this.value, this.storageLimit,
+      this.epochHeight, this.chainId, this.data, this.rlp);
   factory ConfluxTransaction.fromRlp(Uint8List rlp) {
     List<dynamic> t = eth_rlp.decode(rlp);
+    print(hex.encode(t[4]));
     return ConfluxTransaction(
-      arrToInt(t[0]),
-      arrToInt(t[1]),
-      arrToInt(t[2]),
-      Address.fromHex(hex.encode(t[3])),
-      arrToInt(t[4]),
-      arrToInt(t[5]),
-      arrToInt(t[6]),
-      arrToInt(t[7]),
-      t[8],
-      rlp
-    );
+        arrToInt(t[0]) ?? 0,
+        arrToInt(t[1]),
+        arrToInt(t[2]),
+        Address.fromHex(hex.encode(t[3])),
+        BigInt.parse(hex.encode(t[4]), radix: 16),
+        arrToInt(t[5]),
+        arrToInt(t[6]),
+        arrToInt(t[7]),
+        t[8],
+        rlp);
   }
 
   Uint8List hashToSign() {
