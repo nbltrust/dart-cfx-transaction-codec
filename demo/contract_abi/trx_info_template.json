@@ -1,0 +1,6 @@
+[
+    {
+        "name": "CRC20 transfer",
+        "template": "Transfer %s %s to %s"
+    }
+]

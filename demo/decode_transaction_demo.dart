@@ -8,8 +8,10 @@ void main() {
   print('nonce: ${trx.nonce}');
   print('gas price: ${trx.gasPrice}');
   print('gas: ${trx.gas}');
-  print('to: ${trx.to.toBase32()}');
+  print('to: ${trx.to.toBase32(withAddressType: true)}');
   print('value: ${trx.value}');
+  print('storageLimit: ${trx.storageLimit}');
+  print('epochHeight: ${trx.epochHeight}');
   // 这里获取交易中需要签名的hash值
   print('hash to sign: ${hex.encode(trx.hashToSign())}');
 }

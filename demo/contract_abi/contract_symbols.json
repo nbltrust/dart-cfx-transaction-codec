@@ -1,0 +1,11 @@
+ [
+    {
+        "name": "CRCTest",
+        "symbol": "CRCTest",
+        "address": "cfxtest:acf4f4b8vzpm4r8kdnnw7j43pgcg0fx3hpkze0zzeu",
+        "type": "CRC20",
+        "params": {
+            "decimal": "18"
+        }
+    }
+]

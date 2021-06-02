@@ -29,16 +29,25 @@ class ConfluxTransaction {
       this.epochHeight, this.chainId, this.data, this.rlp);
   factory ConfluxTransaction.fromRlp(Uint8List rlp) {
     List<dynamic> t = eth_rlp.decode(rlp);
-    print(hex.encode(t[4]));
+
+    var value = BigInt.zero;
+    try {
+      value = BigInt.parse(hex.encode(t[4]), radix: 16);
+    } catch (e) {
+      //ignore error
+    }
+
+    final chainId = arrToInt(t[7]);
+
     return ConfluxTransaction(
         arrToInt(t[0]) ?? 0,
         arrToInt(t[1]),
         arrToInt(t[2]),
-        Address.fromHex(hex.encode(t[3])),
-        BigInt.parse(hex.encode(t[4]), radix: 16),
+        Address.fromHex(hex.encode(t[3]), netPrefix: chainId == 1 ? 'cfxtest' : 'cfx'),
+        value,
         arrToInt(t[5]),
         arrToInt(t[6]),
-        arrToInt(t[7]),
+        chainId,
         t[8],
         rlp);
   }
