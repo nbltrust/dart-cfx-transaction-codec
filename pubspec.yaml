@@ -8,7 +8,7 @@ dependencies:
   sprintf: ^5.0.0
   ethereum_util:
     git:
-      url: https://github.com/GreenAppers/ethereum_util
+      url: https://github.com/ethereumdart/ethereum_util
 
 environment:
   sdk: ">=1.19.0 <3.0.0"
