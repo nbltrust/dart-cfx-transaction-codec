@@ -3,17 +3,13 @@ version: 0.0.1
 publish_to: 'none'
 
 dependencies:
-  convert: ^2.1.1
+  convert: ^3.0.0
   conflux_codec:
     path: ../
-  eth_abi_codec:
-    git:
-     url: https://github.com/nbltrust/dart-eth-abi-codec
-     ref: '0.2.0'
   ethereum_codec:
     git:
       url: https://github.com/nbltrust/dart-eth-transaction-codec.git
-      ref: 0.2.2
+      ref: 2.0.0
 
 environment:
-  sdk: '>=2.10.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'

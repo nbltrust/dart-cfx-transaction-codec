@@ -8,6 +8,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.17.0"
+  conflux_codec:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.1"
   convert:
     dependency: "direct main"
     description:
@@ -15,6 +22,24 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.1.1"
+  eth_abi_codec:
+    dependency: transitive
+    description:
+      path: "."
+      ref: "2.0.0"
+      resolved-ref: "53e45a9ae5fa780a10e46e4abf14bb8a4f3ff232"
+      url: "https://github.com/nbltrust/dart-eth-abi-codec.git"
+    source: git
+    version: "2.0.0"
+  ethereum_codec:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "2.0.0"
+      resolved-ref: "0d69735f7ea922c366f5095412ae00cb90ead7a5"
+      url: "https://github.com/nbltrust/dart-eth-transaction-codec.git"
+    source: git
+    version: "2.0.0"
   js:
     dependency: transitive
     description:
@@ -30,21 +55,21 @@ packages:
     source: hosted
     version: "1.8.0"
   pointycastle:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: pointycastle
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.6.2"
   sprintf:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sprintf
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "7.0.0"
   typed_data:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: typed_data
       url: "https://pub.flutter-io.cn"

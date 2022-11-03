@@ -4,7 +4,7 @@ library conflux_codec.address;
 
 import 'dart:typed_data';
 import 'package:convert/convert.dart';
-import 'package:pointycastle/digests/sha3.dart';
+import 'package:pointycastle/api.dart';
 
 var BASE32_CHARS = [
   'a','b','c','d','e','f','g','h',
@@ -63,9 +63,9 @@ String getAddressType(Uint8List address) {
 }
 
 class Address {
-  Uint8List address; // plain address
-  String net_prefix; // cfx | cfxtest | net[n] where n != 1, 1029
-  int version_byte;
+ late Uint8List address; // plain address
+ late String net_prefix; // cfx | cfxtest | net[n] where n != 1, 1029
+ late int version_byte;
 
   Address.fromHex(String hexAddr, {String netPrefix = 'cfx', int version = 0x00}) {
     if(hexAddr.startsWith('0x'))
@@ -112,7 +112,7 @@ class Address {
 }
 
 Uint8List my_hexdecode(String hexStr) {
-  return hex.decode((hexStr.length.isOdd ? '0' : '') + hexStr);
+  return Uint8List.fromList(hex.decode((hexStr.length.isOdd ? '0' : '') + hexStr));
 }
 
 // 公钥转地址，算checksum的时候需要把network prefix带进去
@@ -122,7 +122,7 @@ Uint8List my_hexdecode(String hexStr) {
 String publicKeyToAddress(String hexX, String hexY,
     {String netPrefix = 'cfx', bool withAddressType = false}) {
   var plainKey = my_hexdecode(hexX) + my_hexdecode(hexY);
-  var digest = SHA3Digest(256, true).process(Uint8List.fromList(plainKey));
+  var digest = Digest('Keccak/256').process(Uint8List.fromList(plainKey));
   var address = digest.sublist(digest.length - 20).toList();
   address[0] = (address[0] & 0x0f) | 0x10;
   return Address.fromHex(hex.encode(address), netPrefix: netPrefix)
